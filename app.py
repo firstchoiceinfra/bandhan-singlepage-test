@@ -9,8 +9,9 @@ unmounted/remounted, which is what eliminates the old page-to-page flicker.
 Pages ported so far (in the natural user-journey order):
   Batch 1: Home, Registration, Search Partner, My Matches
   Batch 2: Chat & Alerts, Family Meet Scheduler, VIP Membership, Report & Safety
+  Batch 3: Wedding Services, Wedding Budget, Wedding Finance, Kundli Match
 Everything else still shows a "coming in the next batch" placeholder —
-nothing was skipped from these 8 pages, they're 1:1 with the originals.
+nothing was skipped from these 12 pages, they're 1:1 with the originals.
 """
 
 import streamlit as st
@@ -241,8 +242,12 @@ def render_sidebar():
     nav_button("Family Meet", "\U0001F46A", "family_meet")
     nav_button("VIP Membership", "\U0001F451", "vip_membership")
     nav_button("Report & Safety", "\U0001F6A8", "report_safety")
+    nav_button("Wedding Services", "\U0001F6CD\uFE0F", "wedding_services")
+    nav_button("Wedding Budget", "\U0001F4B0", "wedding_budget")
+    nav_button("Wedding Finance", "\U0001F4B3", "wedding_finance")
+    nav_button("Kundli Match", "\U0001F549\uFE0F", "kundli_match")
 
-    st.sidebar.caption("\u2139\uFE0F More pages are being ported over in the next batches (Wedding Services, Budget, Finance, and the rest).")
+    st.sidebar.caption("\u2139\uFE0F More pages are being ported over in the next batches.")
 
     if st.sidebar.button("\U0001F6AA Logout", use_container_width=True):
         logout()
@@ -372,7 +377,7 @@ def page_home():
         st.image("https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=500&q=80", use_container_width=True)
         st.markdown("<div class='feature-box'><h3 style='color:#D4AF37;'>\U0001F6CD\uFE0F Complete Ecosystem</h3><p style='font-weight:700; color:#1A365D; margin:2px 0 10px 0;'>Our Wedding Services</p><p>Designer bridal wear, luxury cars, banquet halls, and premium catering. Our verified vendors cover every single wedding need.</p></div>", unsafe_allow_html=True)
         if st.button("\U0001F6CD\uFE0F Explore Wedding Services", key="cta_wedding", type="secondary", use_container_width=True):
-            go_to("placeholder_wedding_services")
+            go_to("wedding_services")
     with f_col3:
         st.image("https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=500&q=80", use_container_width=True)
         st.markdown("<div class='feature-box'><h3 style='color:#D4AF37;'>\U0001F512 100% Secure</h3><p>Strict Identity Verification. Your personal information and photos are completely secure, giving you full control over your privacy.</p></div>", unsafe_allow_html=True)
@@ -738,10 +743,10 @@ def page_registration():
                 st.markdown("<div class='next-cta-wrap'>", unsafe_allow_html=True)
                 with cta_col1:
                     if st.button("\U0001F4B3 Explore Wedding Finance", key="cta_finance", type="primary", use_container_width=True):
-                        go_to("placeholder_wedding_finance")
+                        go_to("wedding_finance")
                 with cta_col2:
                     if st.button("\U0001F6CD\uFE0F Explore Wedding Services", key="cta_services", type="primary", use_container_width=True):
-                        go_to("placeholder_wedding_services")
+                        go_to("wedding_services")
                 st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -1355,69 +1360,154 @@ def page_report_safety():
 
 
 # =====================================================================
-# PLACEHOLDER — for pages not yet ported in this batch
+# PAGE: WEDDING SERVICES
 # =====================================================================
-def page_placeholder(title):
-    render_global_css(bg_color="#F8F9FA")
-    st.title(f"\U0001F6A7 {title}")
-    st.info("This page hasn't been ported into the single-page version yet — it's coming in the next batch, with every feature identical to the current live app.")
-    if st.button("\u2190 Back to Home"):
-        go_to("home")
+def page_wedding_services():
+    render_global_css(bg_color="#F8F9FA", page_css=""".main-header { background: -webkit-linear-gradient(45deg, #1A365D, #D4AF37); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-family: 'Trebuchet MS', sans-serif; font-weight: 900; font-size: 3rem; text-align: center; margin-bottom: 0px; }
+.step-box { background: white; border-radius: 15px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #EAEAEA; border-left: 8px solid #D4AF37; transition: transform 0.3s ease; }
+.step-box:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.25); }
+.service-main-title-box { background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%); color: white; padding: 12px 18px; border-radius: 10px; margin-bottom: 12px; border-bottom: 3px solid #D4AF37; box-shadow: 0 4px 10px rgba(0,0,0,0.15); display: flex; align-items: center; gap: 15px; }
+.step-badge { background: #D4AF37; color: #0F2027; padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 0.95rem; text-transform: uppercase; }
+.service-sub-title-box { background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 100%); border-left: 5px solid #2563EB; color: #1E3A8A; padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; font-weight: 800; font-size: 1.1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+.service-desc-text { color: #334155; font-size: 0.95rem; line-height: 1.5; margin-bottom: 15px; }
+.cart-box { background: linear-gradient(135deg, #1A365D 0%, #0F2027 100%); color: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+.vendor-card { background: white; border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-left: 6px solid #999; }
+.vendor-card.tier-platinum { border-left-color: #6D6D6D; background: linear-gradient(135deg, #FFFFFF, #F4F4F4); }
+.vendor-card.tier-gold { border-left-color: #D4AF37; }
+.vendor-card.tier-free { border-left-color: #CBD5E1; }
+.tier-chip-platinum { background: linear-gradient(90deg, #6D6D6D, #C0C0C0, #6D6D6D); color: white; padding: 2px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; }
+.tier-chip-gold { background: #D4AF37; color: white; padding: 2px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; }
+.tier-chip-free { background: #CBD5E1; color: #334155; padding: 2px 10px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; }
+.search-vendors-wrap div.stButton > button[kind="primary"] { background: linear-gradient(90deg, #FF416C, #FF4B2B, #D4AF37, #1A365D) !important; background-size: 300% 300% !important; animation: gradientShift 4s ease infinite !important; border: none !important; color: white !important; font-weight: 900 !important; box-shadow: 0 6px 16px rgba(212,175,55,0.4) !important; }
+.search-vendors-wrap div.stButton > button[kind="primary"]:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(212,175,55,0.55) !important; }
+@keyframes gradientShift { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }""")
 
+    if "vendor_favorites" not in st.session_state:
+        st.session_state.vendor_favorites = []
+    if "active_service_category" not in st.session_state:
+        st.session_state.active_service_category = None
 
-# =====================================================================
-# MAIN DISPATCH
-# =====================================================================
-def main():
-    init_demo_store()
+    is_paid_member = st.session_state.get("is_paid_member", False)
 
-    if not st.session_state.logged_in:
-        render_global_css(bg_color="#FAFAFA")
-        render_html("<style>[data-testid='stSidebar'] { display: none !important; }</style>")
-        render_html(f"""
-        <div style="text-align:center; margin-top:20px; margin-bottom:10px;">
-        <div style="background: rgba(255,255,255,0.96); border-radius: 18px; padding: 14px 10px; display: inline-block; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"><img src="data:image/png;base64,{MAIN_LOGO_B64}" style="max-width: 220px; height: auto;"></div>
-        </div>
-        """)
-        col1, col2, col3 = st.columns([1, 2, 1])
-        with col2:
-            render_login_signup()
-        return
+    VENDORS = [
+        {"name": "Royal Events & Management Co.", "category": "Wedding Planner / Management", "city": "Nagpur", "rating": 4.8, "phone": "+91 98450 11101", "tier": "platinum"},
+        {"name": "Nagpur Event Crafters", "category": "Wedding Planner / Management", "city": "Nagpur", "rating": 4.5, "phone": "+91 98450 11102", "tier": "gold"},
+        {"name": "Budget Wedding Planners", "category": "Wedding Planner / Management", "city": "Nagpur", "rating": 4.1, "phone": "+91 98450 11103", "tier": "free"},
+        {"name": "The Grand Orchid Banquets", "category": "Banquet Hall / Lawn / Resort", "city": "Nagpur", "rating": 4.9, "phone": "+91 98450 11201", "tier": "platinum"},
+        {"name": "Greenfield Lawns", "category": "Banquet Hall / Lawn / Resort", "city": "Nagpur", "rating": 4.5, "phone": "+91 98450 11202", "tier": "gold"},
+        {"name": "City View Banquet", "category": "Banquet Hall / Lawn / Resort", "city": "Nagpur", "rating": 4.0, "phone": "+91 98450 11203", "tier": "free"},
+        {"name": "Meera Designer Studio", "category": "Designer Wedding Apparel", "city": "Pune", "rating": 4.9, "phone": "+91 98450 11301", "tier": "platinum"},
+        {"name": "Ethnic Threads Boutique", "category": "Designer Wedding Apparel", "city": "Pune", "rating": 4.4, "phone": "+91 98450 11302", "tier": "gold"},
+        {"name": "Local Bridal Wear", "category": "Designer Wedding Apparel", "city": "Pune", "rating": 4.0, "phone": "+91 98450 11303", "tier": "free"},
+        {"name": "Suvarna Jewels", "category": "Wedding Jewelry & Ornaments", "city": "Mumbai", "rating": 4.9, "phone": "+91 98450 11401", "tier": "platinum"},
+        {"name": "Radiance Gold House", "category": "Wedding Jewelry & Ornaments", "city": "Mumbai", "rating": 4.5, "phone": "+91 98450 11402", "tier": "gold"},
+        {"name": "Glow & Grace Makeovers", "category": "Makeup Artist & Grooming", "city": "Nagpur", "rating": 4.8, "phone": "+91 98450 11501", "tier": "platinum"},
+        {"name": "Bridal Touch Studio", "category": "Makeup Artist & Grooming", "city": "Nagpur", "rating": 4.4, "phone": "+91 98450 11502", "tier": "gold"},
+        {"name": "Simple Glam Makeovers", "category": "Makeup Artist & Grooming", "city": "Nagpur", "rating": 3.9, "phone": "+91 98450 11503", "tier": "free"},
+        {"name": "Frame & Story Films", "category": "Photography & Videography", "city": "Bangalore", "rating": 4.9, "phone": "+91 98450 11601", "tier": "platinum"},
+        {"name": "Candid Moments Studio", "category": "Photography & Videography", "city": "Bangalore", "rating": 4.5, "phone": "+91 98450 11602", "tier": "gold"},
+        {"name": "Floral Dreams Decor", "category": "Mandap, Stage & Floral Decoration", "city": "Nagpur", "rating": 4.7, "phone": "+91 98450 11701", "tier": "platinum"},
+        {"name": "Petal & Light Decorators", "category": "Mandap, Stage & Floral Decoration", "city": "Nagpur", "rating": 4.3, "phone": "+91 98450 11702", "tier": "gold"},
+        {"name": "Basic Stage Setup Co.", "category": "Mandap, Stage & Floral Decoration", "city": "Nagpur", "rating": 3.8, "phone": "+91 98450 11703", "tier": "free"},
+        {"name": "Swaad Caterers", "category": "Catering & Food Service", "city": "Pune", "rating": 4.8, "phone": "+91 98450 11801", "tier": "platinum"},
+        {"name": "Royal Feast Catering", "category": "Catering & Food Service", "city": "Pune", "rating": 4.4, "phone": "+91 98450 11802", "tier": "gold"},
+        {"name": "Homestyle Caterers", "category": "Catering & Food Service", "city": "Pune", "rating": 4.0, "phone": "+91 98450 11803", "tier": "free"},
+        {"name": "Beats & Baraat DJ Co.", "category": "Music, DJ & Entertainment", "city": "Nagpur", "rating": 4.6, "phone": "+91 98450 11901", "tier": "platinum"},
+        {"name": "Party Vibes DJ", "category": "Music, DJ & Entertainment", "city": "Nagpur", "rating": 4.1, "phone": "+91 98450 11902", "tier": "free"},
+        {"name": "PrintCraft Invitations", "category": "Wedding Invitations & Digital Cards", "city": "Mumbai", "rating": 4.5, "phone": "+91 98450 12001", "tier": "gold"},
+        {"name": "Elegant Cards Studio", "category": "Wedding Invitations & Digital Cards", "city": "Mumbai", "rating": 4.7, "phone": "+91 98450 12002", "tier": "platinum"},
+        {"name": "Royal Fleet Transport", "category": "Transportation Services", "city": "Nagpur", "rating": 4.5, "phone": "+91 98450 12101", "tier": "platinum"},
+        {"name": "City Cabs & Buses", "category": "Transportation Services", "city": "Nagpur", "rating": 4.0, "phone": "+91 98450 12102", "tier": "free"},
+        {"name": "Shahi Baraat Services", "category": "Baraat: Ghodi, Buggy & Band", "city": "Nagpur", "rating": 4.8, "phone": "+91 98450 12201", "tier": "platinum"},
+        {"name": "Traditional Band Party", "category": "Baraat: Ghodi, Buggy & Band", "city": "Nagpur", "rating": 4.2, "phone": "+91 98450 12202", "tier": "gold"},
+        {"name": "Acharya Ritual Services", "category": "Vedic Priest & Ritual Services", "city": "Nagpur", "rating": 4.9, "phone": "+91 98450 12301", "tier": "platinum"},
+        {"name": "Shastri Pooja Samagri", "category": "Vedic Priest & Ritual Services", "city": "Nagpur", "rating": 4.3, "phone": "+91 98450 12302", "tier": "gold"},
+    ]
+    TIER_ORDER = {"platinum": 0, "gold": 1, "free": 2}
+    TIER_LABEL = {"platinum": "\U0001F48E Platinum", "gold": "\U0001F947 Gold", "free": "Free Listing"}
 
-    allowed_roles = ["boss", "client"]
-    if st.session_state.user_role == "vendor":
-        allowed_roles = ["vendor"]
+    def get_sorted_vendors(category):
+        matched = [v for v in VENDORS if v["category"] == category]
+        return sorted(matched, key=lambda v: TIER_ORDER[v["tier"]])
 
-    ok = require_login_and_role(allowed_roles + (["vendor"] if st.session_state.user_role == "vendor" else []))
+    def render_vendor_row(v):
+        st.markdown(f"<div class='vendor-card tier-{v['tier']}'>", unsafe_allow_html=True)
+        vc1, vc2, vc3 = st.columns([3, 1, 3])
+        with vc1:
+            st.markdown(f"**{v['name']}** <span class='tier-chip-{v['tier']}'>{TIER_LABEL[v['tier']]}</span><br><span style='color:gray; font-size:0.85rem;'>{v['category']} \u2022 {v['city']}</span>", unsafe_allow_html=True)
+        with vc2:
+            st.markdown(f"\u2B50 {v['rating']}")
+        with vc3:
+            b1, b2, b3 = st.columns(3)
+            b1.button("\U0001F4DE Call", key=f"call_{v['name']}", use_container_width=True)
+            b2.button("\U0001F4AC Message", key=f"msg_{v['name']}", use_container_width=True)
+            already_fav = v["name"] in st.session_state.vendor_favorites
+            fav_label = "\u2764\uFE0F Saved" if already_fav else "\U0001FA76 Add to Favorites"
+            if b3.button(fav_label, key=f"fav_{v['name']}", use_container_width=True, disabled=already_fav):
+                st.session_state.vendor_favorites.append(v["name"])
+                st.toast(f"\u2764\uFE0F {v['name']} saved to your Favorite Vendors!")
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    render_sidebar()
+    st.markdown("<h1 class='main-header'>Complete Wedding Services & Management</h1>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; font-size:1.2rem; color:gray;'>Browse verified categories and search real vendors directly — no cart, no online payment, just direct contact.</p>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align:center; color:#999; font-size:0.85rem;'>\U0001F512 Bandhan.com only lists vendors. All pricing and payments are settled directly between you and the vendor via call or message.</p>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    view = st.session_state.current_view
-    view_titles = {
-        "placeholder_wedding_services": "Wedding Services",
-        "placeholder_wedding_finance": "Wedding Finance",
-    }
+    tab1, tab2 = st.tabs(["\U0001F4CB Step-by-Step Wedding Services", "\u2764\uFE0F My Favorite Vendors"])
 
-    if view == "home":
-        page_home()
-    elif view == "registration":
-        page_registration()
-    elif view == "search_partner":
-        page_search_partner()
-    elif view == "my_matches":
-        page_my_matches()
-    elif view == "chat_alerts":
-        page_chat_alerts()
-    elif view == "family_meet":
-        page_family_meet()
-    elif view == "vip_membership":
-        page_vip_membership()
-    elif view == "report_safety":
-        page_report_safety()
-    elif view in view_titles:
-        page_placeholder(view_titles[view])
-    else:
-        page_home()
+    with tab1:
+        if st.session_state.active_service_category:
+            cat = st.session_state.active_service_category
+            st.markdown(f"### \U0001F50D Vendors for: {cat}")
+            if st.button("\u2190 Back to All Services", key="back_to_services"):
+                st.session_state.active_service_category = None
+                st.rerun()
+            st.markdown("<br>", unsafe_allow_html=True)
 
+            if not is_paid_member:
+                st.warning("\U0001F512 Vendor search is available to paid members only.")
+                if st.button("\U0001F451 View VIP Plans to Unlock Vendor Search"):
+                    go_to("vip_membership")
+            else:
+                sorted_vendors = get_sorted_vendors(cat)
+                if not sorted_vendors:
+                    st.info("No verified vendors in this category yet.")
+                else:
+                    st.caption("Platinum vendors are shown first, followed by Gold, then Free-listed vendors.")
+                    for v in sorted_vendors:
+                        render_vendor_row(v)
+        else:
+            st.markdown("### \U0001F6E0\uFE0F All-in-One Wedding Services Master Checklist")
+            st.write("Browse through all essential wedding categories, view images, and search real verified vendors for each.")
+            st.markdown("<br>", unsafe_allow_html=True)
 
-main()
+            def render_service_card(step_num, title, img_url, sub_title, desc, price_text, category_name):
+                st.markdown("<div class='step-box'>", unsafe_allow_html=True)
+                st.markdown(f"""
+                <div class='service-main-title-box'>
+                    <span class='step-badge'>Service {step_num}</span>
+                    <h3 style='margin:0; color:#FBF5B7; font-family: Georgia, serif; font-size: 1.35rem;'>{title}</h3>
+                </div>
+                """, unsafe_allow_html=True)
+
+                c1, c2 = st.columns([1, 2], gap="medium")
+                with c1:
+                    try:
+                        st.image(img_url, use_container_width=True)
+                    except Exception:
+                        st.warning(f"\u26A0\uFE0F Image not found: {img_url}")
+                with c2:
+                    st.markdown(f"<div class='service-sub-title-box'>{sub_title}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<div class='service-desc-text'>{desc}</div>", unsafe_allow_html=True)
+                    st.markdown(f"<span style='color:gray; font-size:0.85rem;'>Typical market range: {price_text}</span>", unsafe_allow_html=True)
+                    st.markdown("<div class='search-vendors-wrap'>", unsafe_allow_html=True)
+                    if st.button("\U0001F50D Search Vendors", key=f"search_{category_name}", type="primary", use_container_width=True):
+                        st.session_state.active_service_category = category_name
+                        st.rerun()
+                    st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("</div>", unsafe_allow_html=True)
+
+            render_service_card(1, "Professional Wedding Planner & Management Agency",
+                "871745.jpg", "End-to-End Wedding Management & Coordination",
+                "Complete event execution, guest hospitality, and logistics
