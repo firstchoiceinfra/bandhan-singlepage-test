@@ -1,0 +1,6 @@
+streamlit
+Pillow
+pandas
+pymongo
+dnspython
+requests
