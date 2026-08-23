@@ -1,15 +1,16 @@
 """
-Bandhan.com — SINGLE-PAGE prototype (Batch 1 of N)
+Bandhan.com — SINGLE-PAGE prototype (Batch 2 of N)
 ====================================================
-Everything in this ONE file: Home, Registration, Search Partner, My Matches.
-Navigation between them is done purely via st.session_state — there is no
-pages/ folder and no st.switch_page(). Because Streamlit never treats this as
-a "new page", the sidebar component is never unmounted/remounted, which is
-what eliminates the old page-to-page flicker.
+Everything in this ONE file. Navigation between views is done purely via
+st.session_state — there is no pages/ folder and no st.switch_page(). Because
+Streamlit never treats this as a "new page", the sidebar component is never
+unmounted/remounted, which is what eliminates the old page-to-page flicker.
 
-Pages ported so far: Home, Registration, Search Partner, My Matches.
-Everything else shows a "coming in the next batch" placeholder for now —
-nothing was skipped from these 4 pages, they're 1:1 with the originals.
+Pages ported so far (in the natural user-journey order):
+  Batch 1: Home, Registration, Search Partner, My Matches
+  Batch 2: Chat & Alerts, Family Meet Scheduler, VIP Membership, Report & Safety
+Everything else still shows a "coming in the next batch" placeholder —
+nothing was skipped from these 8 pages, they're 1:1 with the originals.
 """
 
 import streamlit as st
@@ -236,8 +237,12 @@ def render_sidebar():
     nav_button("Registration", "\U0001F4DD", "registration")
     nav_button("Search Partner", "\U0001F50D", "search_partner")
     nav_button("My Matches", "\u2764\uFE0F", "my_matches")
+    nav_button("Chat & Alerts", "\U0001F4AC", "chat_alerts")
+    nav_button("Family Meet", "\U0001F46A", "family_meet")
+    nav_button("VIP Membership", "\U0001F451", "vip_membership")
+    nav_button("Report & Safety", "\U0001F6A8", "report_safety")
 
-    st.sidebar.caption("\u2139\uFE0F More pages are being ported over in the next batches (Chat, Wedding Services, VIP, and the rest).")
+    st.sidebar.caption("\u2139\uFE0F More pages are being ported over in the next batches (Wedding Services, Budget, Finance, and the rest).")
 
     if st.sidebar.button("\U0001F6AA Logout", use_container_width=True):
         logout()
@@ -372,7 +377,7 @@ def page_home():
         st.image("https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=500&q=80", use_container_width=True)
         st.markdown("<div class='feature-box'><h3 style='color:#D4AF37;'>\U0001F512 100% Secure</h3><p>Strict Identity Verification. Your personal information and photos are completely secure, giving you full control over your privacy.</p></div>", unsafe_allow_html=True)
         if st.button("\U0001F6E1\uFE0F Trust & Safety Center", key="cta_trust", type="secondary", use_container_width=True):
-            go_to("placeholder_trust_safety")
+            go_to("report_safety")
 
     st.markdown("<br><br><div style='text-align: center; color: #888888; padding: 20px;'><p>Bandhan.com © 2026 | Matrimony • Planning • Vendors • Honeymoon</p></div>", unsafe_allow_html=True)
 
@@ -959,11 +964,394 @@ def page_my_matches():
                     st.caption("\U0001F512 If you want to see who viewed your profile, please upgrade.")
                     st.markdown("<div class='upgrade-blink-wrap'>", unsafe_allow_html=True)
                     if st.button("\U0001F451 Upgrade Now", key=f"upgrade_{name}_{when}", use_container_width=True):
-                        go_to("placeholder_vip")
+                        go_to("vip_membership")
                     st.markdown("</div>", unsafe_allow_html=True)
 
         if not is_paid_member:
             st.info("\U0001F48E Upgrade to any VIP plan to see exactly who viewed your profile and visit their profile directly.")
+
+
+# =====================================================================
+# PAGE: CHAT & ALERTS
+# =====================================================================
+def page_chat_alerts():
+    render_global_css(bg_color="#F8F9FA", page_css=""".tool-header { background: linear-gradient(135deg, #1A365D 0%, #0F2027 100%); padding: 30px; border-radius: 15px; color: white; text-align: center; border-bottom: 5px solid #D4AF37; margin-bottom: 25px; }
+.section-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.06); border: 1px solid #EAEAEA; margin-bottom: 25px; }
+.status-dot { height: 12px; width: 12px; background-color: #27AE60; border-radius: 50%; display: inline-block; margin-right: 8px; }
+.stTabs [data-baseweb="tab-list"] { gap: 8px; flex-wrap: wrap; }
+.stTabs [data-baseweb="tab"] { height: 48px; background: linear-gradient(135deg, #F1F5F9, #E2E8F0); border-radius: 10px 10px 0 0; padding: 8px 16px; font-weight: 800; font-size: 0.95rem; border: 2px solid transparent; transition: all 0.25s ease; }
+.stTabs [aria-selected="true"] { background: linear-gradient(90deg, #FF416C, #FF4B2B, #D4AF37, #1A365D, #2C5364) !important; background-size: 300% 300%; animation: gradientShift 5s ease infinite; border: 2px solid #D4AF37 !important; box-shadow: 0 4px 14px rgba(212,175,55,0.45); }
+.stTabs [aria-selected="true"] p { color: white !important; font-weight: 900 !important; }
+@keyframes gradientShift { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }
+.vip-blink-wrap div.stButton > button {
+    background: linear-gradient(135deg, #FFD700, #FFF9C4, #FFD700) !important;
+    background-size: 200% 200% !important;
+    border: 2px solid #C9A200 !important; color: #4A3600 !important; font-weight: 900 !important;
+    animation: ctaShimmer 2.4s ease infinite, ctaPulse 1.8s ease-in-out infinite !important;
+}
+@keyframes ctaShimmer { 0% {background-position:0% 50%;} 50% {background-position:100% 50%;} 100% {background-position:0% 50%;} }
+@keyframes ctaPulse { 0%,100% { transform:scale(1); box-shadow:0 4px 14px rgba(255,215,0,0.4); } 50% { transform:scale(1.03); box-shadow:0 8px 26px rgba(255,215,0,0.8); } }""")
+
+    if 'unread_msgs' not in st.session_state:
+        st.session_state.unread_msgs = 0
+    else:
+        st.session_state.unread_msgs = 0
+
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        st.markdown("""
+        <div class="tool-header">
+            <h1 style="margin:0; font-family:'Georgia', serif;">\U0001F4AC Chat & Alerts</h1>
+            <p style="font-size:1.1rem; margin-top:10px; color:#E3F2FD;">Chat safely with your verified matches and receive instant WhatsApp & Match updates.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("\U0001F514 Simulate New Message", type="primary", use_container_width=True):
+            st.session_state.unread_msgs += 1
+            st.toast("\u0928\u092f\u093e \u092e\u0948\u0938\u0947\u091c \u0906\u092f\u093e \u0939\u0948!")
+            st.rerun()
+
+    tab_chat, tab_alerts = st.tabs(["\U0001F4AC Secure In-App Messages", "\U0001F514 Match & WhatsApp Alerts"])
+
+    with tab_chat:
+        st.markdown("<div class='section-card'>", unsafe_allow_html=True)
+        chat_col1, chat_col2 = st.columns([1, 3], gap="medium")
+
+        with chat_col1:
+            st.markdown("### \U0001F4AC Conversations")
+            st.markdown("---")
+            contact = st.radio("Select a Match:", ["Priya Sharma (98% Match)", "Aisha Khan (94% Match)", "Bandhan Premium Support"])
+            contact_name = contact.split(" (")[0]
+
+        with chat_col2:
+            st.markdown(f"<h2 style='color:#1A365D; margin-top:0;'>{contact_name}</h2>", unsafe_allow_html=True)
+            st.markdown("<div><span class='status-dot'></span><span style='color:gray;'>Online Now & Verified</span></div>", unsafe_allow_html=True)
+
+            is_paid_member = st.session_state.get("is_paid_member", False)
+            if "Support" not in contact_name:
+                if is_paid_member:
+                    st.markdown(f"<div style='margin-top:8px; background:#F0FFF4; border:1px solid #27AE60; border-radius:8px; padding:8px 14px; display:inline-block;'>\U0001F4DE <b>+91 98{abs(hash(contact_name)) % 100000:05d} {abs(hash(contact_name)) % 90000 + 10000}</b> <span style='color:#27AE60; font-size:0.8rem;'>(VIP unlocked)</span></div>", unsafe_allow_html=True)
+                else:
+                    st.markdown("<div style='margin-top:8px; background:#F8F9FA; border:1px dashed #AAAAAA; border-radius:8px; padding:8px 14px; display:inline-block; color:gray;'>\U0001F512 +91 XXXXX XXXXX — <i>Upgrade to any VIP plan to view phone numbers</i></div>", unsafe_allow_html=True)
+                    st.markdown("<div class='vip-blink-wrap'>", unsafe_allow_html=True)
+                    if st.button("\U0001F451 View VIP Plans", key=f"viewvip_{contact_name}"):
+                        go_to("vip_membership")
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+            family_meet_key = f"family_meet_{contact_name}"
+            if family_meet_key not in st.session_state:
+                st.session_state[family_meet_key] = "none"
+
+            with st.expander("\U0001F46A Family Meet Request (optional)"):
+                if not is_paid_member:
+                    st.warning("\U0001F512 Family Meet Requests are available to paid members only.")
+                    st.markdown("<div class='vip-blink-wrap'>", unsafe_allow_html=True)
+                    if st.button("\U0001F451 Upgrade to Unlock Family Meet", key=f"upgrade_fm_{contact_name}"):
+                        go_to("vip_membership")
+                    st.markdown("</div>", unsafe_allow_html=True)
+                else:
+                    status = st.session_state[family_meet_key]
+                    if "Support" in contact_name:
+                        st.caption("Family meet requests aren't applicable for Support.")
+                    elif status == "none":
+                        st.write(f"Want both families to meet? Send {contact_name}'s family a request — they can accept or decline.")
+                        if st.button(f"\U0001F46A Send Family Meet Request to {contact_name}", key=f"send_fm_{contact_name}"):
+                            st.session_state[family_meet_key] = "pending"
+                            st.rerun()
+                    elif status == "pending":
+                        st.info(f"\u23F3 Family meet request sent to {contact_name}'s family. Waiting for their response.")
+                        st.caption("Demo: simulate their family's response below.")
+                        sc1, sc2 = st.columns(2)
+                        if sc1.button("\u2705 (Demo) They Accept", key=f"acc_fm_{contact_name}"):
+                            st.session_state[family_meet_key] = "accepted"
+                            st.rerun()
+                        if sc2.button("\u274C (Demo) They Decline", key=f"dec_fm_{contact_name}"):
+                            st.session_state[family_meet_key] = "declined"
+                            st.rerun()
+                    elif status == "accepted":
+                        st.success(f"\u2705 {contact_name}'s family accepted your meet request!")
+                        if st.button("\U0001F4C5 Schedule the Family Meet", key=f"sched_fm_{contact_name}"):
+                            go_to("family_meet")
+                    elif status == "declined":
+                        st.warning(f"{contact_name}'s family declined the meet request for now. You can try again later.")
+                        if st.button("\U0001F501 Send New Request", key=f"retry_fm_{contact_name}"):
+                            st.session_state[family_meet_key] = "pending"
+                            st.rerun()
+
+            st.markdown("---")
+
+            chat_key = f"chat_{contact_name}"
+            if chat_key not in st.session_state:
+                if "Support" in contact_name:
+                    st.session_state[chat_key] = [{"role": "assistant", "content": "Hello! How can I assist you today?"}]
+                else:
+                    st.session_state[chat_key] = [{"role": "assistant", "content": "Hi there! I saw we have a high AI compatibility score."}]
+
+            for message in st.session_state[chat_key]:
+                with st.chat_message(message["role"]):
+                    st.markdown(message["content"])
+
+            if prompt := st.chat_input(f"Message {contact_name}..."):
+                st.session_state[chat_key].append({"role": "user", "content": prompt})
+                with st.chat_message("user"):
+                    st.markdown(prompt)
+                with st.chat_message("assistant"):
+                    message_placeholder = st.empty()
+                    message_placeholder.markdown("*(typing...)*")
+                    time.sleep(1.2)
+                    reply = "That sounds wonderful! Shall we connect on a quick call this weekend?" if "Support" not in contact_name else "A manager will call you shortly."
+                    message_placeholder.markdown(reply)
+                st.session_state[chat_key].append({"role": "assistant", "content": reply})
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with tab_alerts:
+        st.markdown("<div class='section-card'><h3>\U0001F514 Notifications</h3><p>Your alerts will appear here.</p></div>", unsafe_allow_html=True)
+
+
+# =====================================================================
+# PAGE: FAMILY MEET SCHEDULER
+# =====================================================================
+def page_family_meet():
+    render_global_css(bg_color="#F8F9FA", page_css=""".meet-header { background: linear-gradient(135deg, #1A365D 0%, #0F2027 100%); padding: 30px; border-radius: 18px; color: white; text-align: center; border: 2px solid #D4AF37; margin-bottom: 25px; }
+.meet-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #EAEAEA; margin-bottom: 20px; }
+.topic-chip { display: inline-block; background: #E2E8F0; color: #1A365D; padding: 6px 14px; border-radius: 20px; font-size: 0.85rem; margin: 4px; font-weight: 600; }""")
+
+    st.markdown("""
+    <div class="meet-header">
+        <h1 style="margin:0; font-family:'Georgia', serif;">\U0001F46A Virtual Family Video Meet Schedule</h1>
+        <p style="color:#FBF5B7; margin-top:8px;">Invite up to 4 people from each side to a video call, with automatic reminders for everyone.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("<div class='meet-card'>", unsafe_allow_html=True)
+    st.markdown("### Schedule a Family Video Meet")
+
+    logged_in_name = st.session_state.get("user_name", "")
+    render_html(f"""
+    <div style="background:#F0F4F8; border-left:4px solid #D4AF37; border-radius:8px; padding:10px 16px; margin-bottom:16px;">
+        <span style="color:gray; font-size:0.85rem;">Scheduling as</span><br>
+        <b style="color:#1A365D; font-size:1.1rem;">{logged_in_name}</b>
+    </div>
+    """)
+
+    d1, d2, d3 = st.columns(3)
+    with d1:
+        meet_date = st.date_input("Preferred Date")
+    with d2:
+        meet_time = st.time_input("Preferred Time")
+    with d3:
+        ampm_override = st.selectbox("AM / PM", ["Auto (from time above)", "AM", "PM"])
+
+    time_str = meet_time.strftime("%I:%M %p")
+    if ampm_override != "Auto (from time above)":
+        time_str = meet_time.strftime("%I:%M") + f" {ampm_override}"
+
+    reminder_lead = st.selectbox("Send advance reminder to all invitees", ["1 hour before", "3 hours before", "6 hours before", "1 day before", "2 days before"], index=3)
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("#### \U0001F464 Add Up to 4 Invitees from Each Side")
+    st.caption("Every person added here will receive a video call invitation and the advance reminder you selected above.")
+
+    bride_col, groom_col = st.columns(2)
+    with bride_col:
+        st.markdown("##### \U0001F470 Bride's Side (max 4)")
+        bride_contacts = []
+        for i in range(1, 5):
+            bc1, bc2 = st.columns(2)
+            b_name = bc1.text_input(f"Name {i}", key=f"bride_name_{i}", placeholder="Full Name")
+            b_contact = bc2.text_input(f"Phone / Email {i}", key=f"bride_contact_{i}", placeholder="+91... or email")
+            if b_name and b_contact:
+                bride_contacts.append({"name": b_name, "contact": b_contact})
+    with groom_col:
+        st.markdown("##### \U0001F935 Groom's Side (max 4)")
+        groom_contacts = []
+        for i in range(1, 5):
+            gc1, gc2 = st.columns(2)
+            g_name = gc1.text_input(f"Name {i}", key=f"groom_name_{i}", placeholder="Full Name")
+            g_contact = gc2.text_input(f"Phone / Email {i}", key=f"groom_contact_{i}", placeholder="+91... or email")
+            if g_name and g_contact:
+                groom_contacts.append({"name": g_name, "contact": g_contact})
+
+    st.markdown("<br>", unsafe_allow_html=True)
+    if st.button("\U0001F4C5 Send Video Meet Invitations", type="primary", use_container_width=True):
+        if not bride_contacts or not groom_contacts:
+            st.warning("Please add at least one contact from each side (up to 4 each) before sending invitations.")
+        else:
+            total_invited = len(bride_contacts) + len(groom_contacts)
+            st.success(f"\u2705 Video meet scheduled by {logged_in_name} for {meet_date} at {time_str}.")
+            st.success(f"\U0001F4E9 Invitations sent to all {total_invited} invitees ({len(bride_contacts)} from Bride's side, {len(groom_contacts)} from Groom's side).")
+            st.info(f"\u23F0 An advance reminder will be sent to everyone {reminder_lead} the video call.")
+            st.markdown("**Invited:**")
+            for c in bride_contacts:
+                st.write(f"\U0001F470 {c['name']} \u2014 {c['contact']}")
+            for c in groom_contacts:
+                st.write(f"\U0001F935 {c['name']} \u2014 {c['contact']}")
+            st.caption("\U0001F4F9 The video call will start automatically for all invitees at the scheduled time.")
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown("<div class='meet-card'>", unsafe_allow_html=True)
+    st.markdown("### \U0001F4AC AI-Suggested Conversation Topics")
+    st.write("Helpful, non-awkward topics to guide the first family conversation:")
+    topics = ["Family traditions & festivals", "How the couple met", "Career & future plans",
+              "Living arrangements post-marriage", "Shared hobbies", "Wedding timeline preferences"]
+    chips = "".join(f"<span class='topic-chip'>{t}</span>" for t in topics)
+    st.markdown(chips, unsafe_allow_html=True)
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.info("\U0001F4F9 Actual video calling requires a real-time video integration (e.g. Twilio/Agora) — this page currently handles scheduling and prep only.")
+
+
+# =====================================================================
+# PAGE: VIP MEMBERSHIP
+# =====================================================================
+def page_vip_membership():
+    render_global_css(bg_color="#F8F9FA", page_css=""".vip-header { background: linear-gradient(135deg, #0F2027 0%, #203A43 50%, #2C5364 100%); padding: 40px; border-radius: 20px; color: white; text-align: center; border: 2px solid #D4AF37; box-shadow: 0 15px 35px rgba(0,0,0,0.2); margin-bottom: 30px; }
+.vip-title { font-family: 'Georgia', serif; font-size: 3rem; font-weight: 900; margin: 0; background: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.plan-card { background: white; border-radius: 15px; padding: 30px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.08); border: 1px solid #EAEAEA; border-top: 6px solid #D4AF37; transition: transform 0.3s ease; margin-bottom: 20px; }
+.plan-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(212, 175, 55, 0.25); }
+.price-tag { font-size: 2.5rem; color: #27AE60; font-weight: 900; margin: 15px 0; }""")
+
+    st.markdown("""
+    <div class="vip-header">
+        <h1 class="vip-title">Bandhan VIP & Premium Memberships</h1>
+        <p style="font-size:1.2rem; margin-top:15px; color:#FBF5B7; font-style:italic;">Upgrade your account to unlock direct phone numbers, unlimited secure chats, verified badges, and priority matching.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3, gap="large")
+
+    with col1:
+        st.markdown("""
+        <div class="plan-card">
+            <h3>\U0001F949 Silver</h3>
+            <p style="color:gray;">Essential features for quick matching</p>
+            <div class="price-tag">\u20b9 499</div>
+            <p style="font-size:0.9rem; color:#555;">Valid for 3 Months</p>
+            <hr>
+            <p style="text-align:left;">
+            \u2705 View 50 Verified Phone Numbers<br>
+            \u2705 Send 100 Direct Messages<br>
+            \u2705 Basic Profile Trust Badge<br>
+            \u274C Dedicated Relationship Manager
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Choose Silver Plan", key="p1", use_container_width=True):
+            st.session_state.is_paid_member = True
+            st.session_state.membership_tier = "silver"
+            st.success("\U0001F389 Silver VIP Selected! Redirecting to secure payment gateway...")
+
+    with col2:
+        st.markdown("""
+        <div class="plan-card" style="border-top: 6px solid #1A365D;">
+            <h3>\U0001F947 Gold (Most Popular)</h3>
+            <p style="color:gray;">Best value for serious matchmaking</p>
+            <div class="price-tag">\u20b9 1,499</div>
+            <p style="font-size:0.9rem; color:#555;">Valid for 6 Months</p>
+            <hr>
+            <p style="text-align:left;">
+            \u2705 Unlimited Phone Numbers & Calls<br>
+            \u2705 Unlimited Direct Live Chat<br>
+            \u2705 Gold Verified Trust Badge<br>
+            \u2705 Profile Highlight in Search Results
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Choose Gold Plan", key="p2", type="primary", use_container_width=True):
+            st.session_state.is_paid_member = True
+            st.session_state.membership_tier = "gold"
+            st.balloons()
+            st.success("\U0001F389 Gold VIP Selected! Premium benefits unlocked successfully.")
+
+    with col3:
+        st.markdown("""
+        <div class="plan-card" style="border-top: 6px solid #E74C3C;">
+            <h3>\U0001F48E Platinum (VIP)</h3>
+            <p style="color:gray;">Personalized matchmaking & luxury service</p>
+            <div class="price-tag">\u20b9 2,499</div>
+            <p style="font-size:0.9rem; color:#555;">Valid for 1 Year</p>
+            <hr>
+            <p style="text-align:left;">
+            \u2705 Dedicated Relationship Manager<br>
+            \u2705 Hand-picked Verified Matches<br>
+            \u2705 Complete Privacy Shield<br>
+            \u2705 Wedding Planning Assistance
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        if st.button("Choose Platinum Plan", key="p3", use_container_width=True):
+            st.session_state.is_paid_member = True
+            st.session_state.membership_tier = "platinum"
+            st.success("\U0001F389 Platinum VIP Selected! Our senior relationship manager will contact you shortly.")
+
+
+# =====================================================================
+# PAGE: REPORT & SAFETY
+# =====================================================================
+def page_report_safety():
+    render_global_css(bg_color="#F8F9FA", page_css=""".safety-header { background: linear-gradient(135deg, #7B1113 0%, #1A365D 100%); padding: 30px; border-radius: 18px; color: white; text-align: center; border: 2px solid #D4AF37; margin-bottom: 25px; }
+.safety-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.06); border: 1px solid #EAEAEA; }
+.blocked-item { background: #FFF5F5; border-left: 4px solid #E53E3E; padding: 12px 15px; border-radius: 8px; margin-bottom: 10px; }""")
+
+    st.markdown("""
+    <div class="safety-header">
+        <h1 style="margin:0; font-family:'Georgia', serif;">\U0001F6A8 Report & Safety Center</h1>
+        <p style="color:#FBF5B7; margin-top:8px;">Your safety matters. Report suspicious profiles and manage your blocked list.</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    tab1, tab2, tab3 = st.tabs(["\U0001F6A9 Report a Profile", "\U0001F6AB Blocked Profiles", "\U0001F916 Fake Profile Detection"])
+
+    with tab1:
+        st.markdown("<div class='safety-card'>", unsafe_allow_html=True)
+        st.markdown("### Report Suspicious or Inappropriate Behaviour")
+        profile_name = st.text_input("Profile Name / ID to Report")
+        reason = st.selectbox("Reason for Report", [
+            "Fake / Misleading Profile", "Inappropriate Photos", "Harassment or Abusive Messages",
+            "Asking for Money", "Already Married / Undisclosed Relationship", "Spam or Solicitation", "Other"
+        ])
+        details = st.text_area("Additional Details (optional)")
+        also_block = st.checkbox("Also block this profile from contacting me")
+        if st.button("\U0001F6A9 Submit Report", type="primary", use_container_width=True):
+            if profile_name:
+                st.success(f"\u2705 Report submitted against **{profile_name}**. Our Trust & Safety team will review within 24 hours." + (" Profile has also been blocked." if also_block else ""))
+            else:
+                st.warning("Please enter the profile name or ID.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with tab2:
+        st.markdown("<div class='safety-card'>", unsafe_allow_html=True)
+        st.markdown("### Your Blocked Profiles")
+        blocked = ["Unknown_User_4521", "Suspicious_Profile_882"]
+        if blocked:
+            for b in blocked:
+                c1, c2 = st.columns([4, 1])
+                c1.markdown(f"<div class='blocked-item'>\U0001F6AB {b}</div>", unsafe_allow_html=True)
+                c2.button("Unblock", key=f"unblock_{b}")
+        else:
+            st.info("You haven't blocked any profiles yet.")
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    with tab3:
+        st.markdown("<div class='safety-card'>", unsafe_allow_html=True)
+        st.markdown("### \U0001F916 AI Fake Profile Detection")
+        st.write("Our AI continuously scans profiles for signs of fraud — stolen photos, inconsistent details, and suspicious activity patterns.")
+        st.markdown("<br>", unsafe_allow_html=True)
+        flagged = [
+            {"id": "#BND-9021", "reason": "Reverse image search match found on stock photo site", "risk": "High"},
+            {"id": "#BND-9187", "reason": "Multiple accounts from same device ID", "risk": "Medium"},
+        ]
+        for f in flagged:
+            color = "#E53E3E" if f["risk"] == "High" else "#D4AF37"
+            st.markdown(f"""
+            <div style="background:white; border-left:5px solid {color}; padding:15px; border-radius:8px; margin-bottom:10px; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+                <b>{f['id']}</b> — Risk: <span style="color:{color}; font-weight:bold;">{f['risk']}</span><br>
+                <span style="color:gray; font-size:0.9rem;">{f['reason']}</span>
+            </div>
+            """, unsafe_allow_html=True)
+        st.caption("Visible to Admin & Trust and Safety team only.")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 
 # =====================================================================
@@ -1008,8 +1396,6 @@ def main():
     view_titles = {
         "placeholder_wedding_services": "Wedding Services",
         "placeholder_wedding_finance": "Wedding Finance",
-        "placeholder_trust_safety": "Trust & Safety Center",
-        "placeholder_vip": "VIP Membership",
     }
 
     if view == "home":
@@ -1020,6 +1406,14 @@ def main():
         page_search_partner()
     elif view == "my_matches":
         page_my_matches()
+    elif view == "chat_alerts":
+        page_chat_alerts()
+    elif view == "family_meet":
+        page_family_meet()
+    elif view == "vip_membership":
+        page_vip_membership()
+    elif view == "report_safety":
+        page_report_safety()
     elif view in view_titles:
         page_placeholder(view_titles[view])
     else:
