@@ -1,6 +1,8 @@
 streamlit
 Pillow
 pandas
+numpy
 pymongo
 dnspython
 requests
+bcrypt
