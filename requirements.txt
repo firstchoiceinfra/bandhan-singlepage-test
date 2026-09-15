@@ -6,3 +6,4 @@ pymongo
 dnspython
 requests
 bcrypt
+agora-token-builder
