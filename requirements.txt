@@ -7,3 +7,5 @@ dnspython
 requests
 bcrypt
 agora-token-builder
+ffmpeg
+tesseract-ocr
