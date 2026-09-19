@@ -8,6 +8,6 @@ requests
 bcrypt
 agora-token-builder
 ffmpeg
-tesseract-ocr
 pyswisseph
+tesseract-ocr
 opencv-python-headless
