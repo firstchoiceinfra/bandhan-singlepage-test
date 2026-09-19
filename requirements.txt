@@ -10,3 +10,4 @@ agora-token-builder
 ffmpeg
 tesseract-ocr
 pyswisseph
+opencv-python-headless
