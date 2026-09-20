@@ -9,5 +9,5 @@ bcrypt
 agora-token-builder
 ffmpeg
 pyswisseph
-pytesseract-ocr
+pytesseract
 opencv-python-headless
