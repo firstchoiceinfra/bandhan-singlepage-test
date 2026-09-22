@@ -11,3 +11,4 @@ ffmpeg
 pyswisseph
 pytesseract
 opencv-python-headless
+boto3
